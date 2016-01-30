@@ -29,8 +29,8 @@ int main(){
   boost::filesystem::create_directory(dir);
   
   //ログファイルを分割して保存する
-  long log_maxline = 360000;	// 最大行数
-  int log_filemax = 10;		// 何個ログファイルを作るか
+  long log_maxline = 100000;	// 最大行数
+  int log_filemax = 20;		// 何個ログファイルを作るか
   int strm_idx = 0;		// いま何番目のファイルに書き込んでいるか
   int line_idx = 0;		// いま何行目か
   vector<unique_ptr<ofstream>> strms;	// ファイルストリームベクタ
