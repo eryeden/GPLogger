@@ -10,7 +10,10 @@ using std::string;
 
 int main(){
 
-  Serial port1("/dev/ttyS0");	
+  Serial port1("/dev/ttyACM0");	
+
+  
+
   port1.close();
 
   return 1;
