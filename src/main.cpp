@@ -6,21 +6,36 @@
 
 #include <serial/serial.h>
 
+#include <boost/filesystem/path.hpp>
+#include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/fstream.hpp>
+
+/*
+  ２０秒位は削除してやる
+*/
+
+
 using namespace serial;
 
 using std::string;
 using namespace std;
 
+#define LOGGING
+
 int main(){
 
+  //ディレクトリの作成
+  boost::filesystem::path dir("logs");
+  boost::filesystem::create_directory(dir);
+  
   //ログファイルを分割して保存する
-  int log_maxline = 100;	// 最大行数
+  long log_maxline = 360000;	// 最大行数
   int log_filemax = 10;		// 何個ログファイルを作るか
   int strm_idx = 0;		// いま何番目のファイルに書き込んでいるか
   int line_idx = 0;		// いま何行目か
   vector<unique_ptr<ofstream>> strms;	// ファイルストリームベクタ
   for(int i = 0; i < log_filemax; ++i){
-    string fname = "log";
+    string fname = "logs/log";
     fname += to_string(i+1);
     fname += ".txt";
     strms.emplace_back(new ofstream(fname));
@@ -57,6 +72,7 @@ int main(){
     }
     cout << buffer << endl;
 
+    //#ifdef LOGGING
     line_idx++;
     *strms[strm_idx] << buffer << endl;
     if(line_idx == log_maxline){
@@ -66,9 +82,7 @@ int main(){
 	break;
       }
     }
-    
-    
-    
+    //#endif
   }
   
   port1.close();

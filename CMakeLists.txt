@@ -23,7 +23,7 @@ SET(LIB_SERIAL_SRCS
 
 #--specs=nosys.specsを入れないとレファレンス出る。
 set(COMPILEOPTIONS "-g -Wall")
-set(COMPILEOPTIONSXX "-g -Wall -std=c++11")
+set(COMPILEOPTIONSXX "-std=c++11")
 set(LINKOPTIONS "-g")
 
 MESSAGE("###########PROJECT ROOT DIRECTORY SOURCE##############")
@@ -38,11 +38,16 @@ SET(DIR_BIN "${PROJECT_SOURCE_DIR}/bin")
 
 #############################################################################
 
+#ここでリンクする、使用する、Boostのエレメントが決まる。ここに乗ってないのを使用してコンパイルするとリンクエラーが出るので注意
+find_package(Boost REQUIRED regex date_time system filesystem thread graph program_options)
+
 INCLUDE_DIRECTORIES(
   ${PROJECT_SOURCE_DIR}
   ${DIR_INCLUDE}
   ${LIB_SERIAL_INCLUDE}
+  ${Boost_INCLUDE_DIR}
   )
+
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${COMPILEOPTIONS}")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CMAKE_C_FLAGS} ${COMPILEOPTIONSXX}")
@@ -69,6 +74,10 @@ set(SRCS
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 add_executable(${CMAKE_PROJECT_NAME} ${SRCS})
+#Boostをリンク
+TARGET_LINK_LIBRARIES(${CMAKE_PROJECT_NAME} ${Boost_LIBRARIES})
+
+
 
 set(TARGET ${CMAKE_PROJECT_NAME})
 
